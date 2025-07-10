@@ -50,7 +50,10 @@ namespace MonoGame2DShooterPrototype.Source.Core
             _fontSystemBold = new FontSystem();
             _fontSystemBold.AddFont(File.ReadAllBytes(Path.Combine(Content.RootDirectory, "Arial-bold.ttf")));
 
-            MyraEnvironment.Game = this;
+            // Initialize GeonBit.UI
+            GeonBit.UI.UserInterface.Initialize(Content, GeonBit.UI.BuiltinThemes.hd);
+
+            MyraEnvironment.Game = this; // TODO: Remove after full migration
             _menuScreen = new MainMenuScreen(this);
             _settingsScreen = new SettingsScreen(this);
             _currentScreen = _menuScreen;

@@ -1,0 +1,108 @@
+# MonoGame/Visual Studio
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.pidb
+*.sdf
+*.cache
+*.dbmdl
+*.bak
+*.log
+*.vs/
+*.vscode/
+*.DS_Store
+*.swp
+*.sln.docstates
+*.orig
+*.tmp
+*.temp
+*.ncb
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*.psess
+*.vsp
+*.vspx
+*.vsix
+*.docstates
+*.ipch
+*.iobj
+*.ipdb
+*.opensdf
+*.tlog
+*.log
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+*.db
+*.pyc
+*.pyo
+*.pyd
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+*.idea/
+# MonoGame content pipeline cache
+Content/bin/
+Content/obj/
+# Rider
+.idea/
+*.sln.iml
+# JetBrains
+*.dotCover
+# Mac
+.DS_Store
+# Windows
+Thumbs.db
+Desktop.ini
+# Python virtualenv
+venv/
+ENV/
+# Node
+node_modules/
+# Test results
+TestResults/
+# NuGet
+*.nupkg
+# Build results
+*.exe
+*.dll
+*.app
+*.dylib
+*.so
+*.a
+*.lib
+*.exp
+*.pdb
+*.idb
+*.ipdb
+*.iobj
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sdf
+*.cache
+*.dbmdl
+*.bak
+*.swp
+*.swo
+*.sln.ide
+*.sln.ide.*
+# End of file
