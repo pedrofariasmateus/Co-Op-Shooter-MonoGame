@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.UI;
 
 namespace MonoGame2DShooterPrototype.Source.Core
 {
@@ -8,6 +7,5 @@ namespace MonoGame2DShooterPrototype.Source.Core
     {
         void Update(GameTime gameTime);
         void Draw(SpriteBatch spriteBatch);
-        Desktop GetMyraDesktop();
     }
 }

@@ -3,11 +3,19 @@
   <SourceFile>D:/Projects/MonoGame2DShooterPrototype/Content/DefaultFont.spritefont</SourceFile>
   <SourceTime>2025-07-04T20:03:25.1474618+01:00</SourceTime>
   <DestFile>D:/Projects/MonoGame2DShooterPrototype/Content/bin/DesktopGL/Content/DefaultFont.xnb</DestFile>
-  <DestTime>2025-07-10T01:01:42.3649814+01:00</DestTime>
+  <DestTime>2025-07-10T03:39:34.5302567+01:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2025-06-02T11:31:02+01:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
   <ProcessorTime>2025-06-02T11:31:02+01:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
   <Dependencies />
   <BuildAsset />
   <BuildOutput />

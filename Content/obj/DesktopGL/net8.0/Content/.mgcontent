@@ -5,8 +5,184 @@
   <Config />
   <SourceFiles>
     <File>D:/Projects/MonoGame2DShooterPrototype/Content/DefaultFont.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/editor/effects/disabled.fx</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/editor/effects/silhouette.fx</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/editor/fonts/Bold.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/editor/fonts/Italic.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/editor/fonts/Regular.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/effects/disabled.fx</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/effects/silhouette.fx</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/fonts/Bold.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/fonts/Italic.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/fonts/Regular.spritefont</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/arrow_down.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/arrow_up.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_alternative_down.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_alternative_hover.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_alternative.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_default_down.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_default_hover.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_default.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_fancy_down.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_fancy_hover.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/button_fancy.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/checkbox_down.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/checkbox_hover.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/checkbox.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/cursor_default.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/cursor_ibeam.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/cursor_pointer.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/file_icon.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/folder_icon.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/horizontal_line.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Apple.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Armor.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Axe.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/background.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/BloodySword.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Bone.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Book.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Cubes.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Diamond.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Explanation.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Feather.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/FloppyDisk.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/GoldCoins.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/GoldShard.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Heart.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Helmet.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Key.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/MagicBook.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/MagicWand.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Map.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/None.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/OrbBlue.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/OrbGreen.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/OrbRed.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Pistol.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionBlue.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionCyan.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionGreen.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionPurple.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionRed.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/PotionYellow.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Ring.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RingGold.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RingGoldRuby.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RingRuby.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RubyBlue.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RubyGreen.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RubyPink.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RubyPurple.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/RubyRed.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Sack.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Scroll.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Shield.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/ShieldAndSword.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Shovel.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/SilverShard.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Skull.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Sword.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/Trap.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/ZoomIn.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/icons/ZoomOut.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/panel_default.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/panel_fancy.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/panel_golden.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/panel_listbackground.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/panel_simple.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/progressbar_fill.png</File>
+    <File>D:/Projects/MonoGame2DShooterPrototype/Content/GeonBit.UI/Themes/hd/textures/progressbar.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>
