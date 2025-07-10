@@ -1,0 +1,57 @@
+{
+  "AudioSettings": {
+    "MasterVolume": 8,
+    "MusicVolume": 4,
+    "SfxVolume": 10
+  },
+  "VideoSettings": {
+    "Fullscreen": false,
+    "Resolution": "800x600"
+   },
+  "GameSettings": {
+    "ShowFPS": true,
+    "ShowDebugInfo": false,
+    "ControllerSupport": true
+  },
+  "InputSettings": {
+    "Player1": {
+      "KeyboardEnabled": true,
+      "ControllerEnabled": false,
+      "ControllerIndex": 0,
+      "KeyboardKeybindings": {
+        "MoveUp": "W",
+        "MoveDown": "S",
+        "MoveLeft": "A",
+        "MoveRight": "D",
+        "Shoot": "Space"
+      },
+      "ControllerKeybindings": {
+        "MoveUp": "DPadUp",
+        "MoveDown": "DPadDown",
+        "MoveLeft": "DPadLeft",
+        "MoveRight": "DPadRight",
+        "Shoot": "ButtonA"
+      }
+    },
+    "Player2": {
+      "KeyboardEnabled": true,
+      "ControllerEnabled": false,
+      "ControllerIndex": 1,
+      "KeyboardKeybindings": {
+        "MoveUp": "Up",
+        "MoveDown": "Down",
+        "MoveLeft": "Left",
+        "MoveRight": "Right",
+        "Shoot": "-"
+      },
+      "ControllerKeybindings": {
+        "MoveUp": "DPadUp",
+        "MoveDown": "DPadDown",
+        "MoveLeft": "DPadLeft",
+        "MoveRight": "DPadRight",
+        "Shoot": "ButtonA"
+      }
+    }
+  }
+
+}
