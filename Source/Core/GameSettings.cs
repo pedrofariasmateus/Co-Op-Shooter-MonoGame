@@ -142,5 +142,31 @@ namespace MonoGame2DShooterPrototype.Source.Core
         public int ControllerIndex { get; set; } = 0;
         public KeyboardKeybindings KeyboardKeybindings { get; set; } = new KeyboardKeybindings();
         public ControllerKeybindings ControllerKeybindings { get; set; } = new ControllerKeybindings();
+
+        // Returns a dictionary of action-key pairs for the currently enabled input type
+        public System.Collections.Generic.Dictionary<string, string> KeyBindings
+        {
+            get
+            {
+                var dict = new System.Collections.Generic.Dictionary<string, string>();
+                if (KeyboardEnabled && KeyboardKeybindings != null)
+                {
+                    dict["Move Up"] = KeyboardKeybindings.MoveUp;
+                    dict["Move Down"] = KeyboardKeybindings.MoveDown;
+                    dict["Move Left"] = KeyboardKeybindings.MoveLeft;
+                    dict["Move Right"] = KeyboardKeybindings.MoveRight;
+                    dict["Shoot"] = KeyboardKeybindings.Shoot;
+                }
+                else if (ControllerEnabled && ControllerKeybindings != null)
+                {
+                    dict["Move Up"] = ControllerKeybindings.MoveUp;
+                    dict["Move Down"] = ControllerKeybindings.MoveDown;
+                    dict["Move Left"] = ControllerKeybindings.MoveLeft;
+                    dict["Move Right"] = ControllerKeybindings.MoveRight;
+                    dict["Shoot"] = ControllerKeybindings.Shoot;
+                }
+                return dict;
+            }
+        }
     }
 }

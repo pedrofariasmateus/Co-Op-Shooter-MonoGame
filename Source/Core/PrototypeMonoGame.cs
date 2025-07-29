@@ -24,6 +24,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
         private IGameScreen _currentScreen;
         private MainMenuScreen _menuScreen;
         private SettingsScreen _settingsScreen;
+        private GameScreen _gameScreen;
 
         public GameSettings GameSettings { get; private set; }
         public FontSystem FontSystem => _fontSystem;
@@ -33,7 +34,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true; // Show mouse cursor for GeonBit.UI
             GameSettings = GameSettings.Load();
         }
 
@@ -62,8 +63,8 @@ namespace MonoGame2DShooterPrototype.Source.Core
 
         protected override void Update(GameTime gameTime)
         {
-            // Only update GeonBit UI for menu
-            if (_currentScreen is MainMenuScreen)
+            // Update GeonBit UI for both menu and settings screens
+            if (_currentScreen is MainMenuScreen || _currentScreen is SettingsScreen)
             {
                 GeonBit.UI.UserInterface.Active.Update(gameTime);
             }
@@ -81,8 +82,8 @@ namespace MonoGame2DShooterPrototype.Source.Core
 
         protected override void Draw(GameTime gameTime)
         {
-            // Set background color for menu
-            if (_currentScreen is MainMenuScreen)
+            // Draw GeonBit.UI for both menu and settings screens
+            if (_currentScreen is MainMenuScreen || _currentScreen is SettingsScreen)
             {
                 GraphicsDevice.Clear(MainMenuScreen.MenuBackgroundColor);
                 GeonBit.UI.UserInterface.Active.Draw(_spriteBatch);
@@ -97,13 +98,25 @@ namespace MonoGame2DShooterPrototype.Source.Core
             base.Draw(gameTime);
         }
 
-        public void SwitchToGame() => _currentState = GameState.Playing;
+        public void SwitchToGame()
+        {
+            // Create and set up the game screen
+            _gameScreen = new Screens.GameScreen(GraphicsDevice, GameSettings);
+            _gameScreen.LoadContent(Content);
+            _currentScreen = _gameScreen;
+            // Clear GeonBit UI (not used in gameplay)
+            GeonBit.UI.UserInterface.Active.Clear();
+            _currentState = GameState.Playing;
+        }
         public void SwitchToSettings()
         {
             // Reload settings from file before showing the screen
             GameSettings = GameSettings.Load();
             _settingsScreen = new SettingsScreen(this);
             _currentScreen = _settingsScreen;
+            // Switch GeonBit UI to settings panel
+            GeonBit.UI.UserInterface.Active.Clear();
+            GeonBit.UI.UserInterface.Active.AddEntity(_settingsScreen.GetGeonBitPanel());
             _currentState = GameState.Settings;
         }
         public void SwitchToMenu()

@@ -56,8 +56,8 @@ namespace MonoGame2DShooterPrototype.Source.Screens
             playButton.Anchor = Anchor.Auto;
             settingsButton.Anchor = Anchor.Auto;
             quitButton.Anchor = Anchor.Auto;
-            //playButton.OnClick = (Entity btn) => _game.SwitchToGame();
-            //settingsButton.OnClick = (Entity btn) => _game.SwitchToSettings();
+            playButton.OnClick = (Entity btn) => _game.SwitchToGame();
+            settingsButton.OnClick = (Entity btn) => _game.SwitchToSettings();
             quitButton.OnClick = (Entity btn) => _game.QuitGame();
             buttonPanel.AddChild(playButton);
             buttonPanel.AddChild(settingsButton);

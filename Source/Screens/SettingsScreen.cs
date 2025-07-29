@@ -1,269 +1,366 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Myra.Graphics2D.UI;
-using Myra.Graphics2D.Brushes;
+using GeonBit.UI.Entities;
 using MonoGame2DShooterPrototype.Source.Core;
-using MonoGame2DShooterPrototype.Panels;
-using FontStashSharp;
 
-namespace MonoGame2DShooterPrototype
+namespace MonoGame2DShooterPrototype.Source.Screens
 {
     public class SettingsScreen : IGameScreen
     {
-        private readonly Desktop _desktop;
+        private readonly Panel _mainPanel;
         private readonly PrototypeMonoGame _game;
-        private readonly GameSettings _settings;
-
-        // Color palette (same as MainMenuScreen)
-        private static readonly Color MenuBackgroundColor = new Color(30, 32, 48);
-        private static readonly Color ButtonColor = new Color(36, 44, 66);
-        private static readonly Color ButtonHoverColor = new Color(50, 70, 110);
-        private static readonly Color ButtonPressedColor = new Color(70, 90, 130);
-        private static readonly Color ButtonTextColor = Color.White;
-        private static readonly Color TitleColor = new Color(220, 220, 255);
-        private static readonly SolidBrush MenuBackgroundBrush = new SolidBrush(MenuBackgroundColor);
-        private static readonly SolidBrush ButtonBrush = new SolidBrush(ButtonColor);
-        private static readonly SolidBrush ButtonHoverBrush = new SolidBrush(ButtonHoverColor);
-        private static readonly SolidBrush ButtonPressedBrush = new SolidBrush(ButtonPressedColor);
-        private static readonly Color CardBackgroundColor = new Color(48, 52, 72); // lighter for more contrast
-        private static readonly Color CardBorderColor = new Color(120, 140, 200); // brighter border
-        private static readonly int CardPadding = 32; // more padding
+        private GameSettings _settings;
         private string _selectedTab = "Video";
-        private static readonly Color TabHighlightColor = new Color(120, 160, 255); // re-add for tab highlight
+        private Panel _tabContentPanel;
 
         public SettingsScreen(PrototypeMonoGame game)
         {
             _game = game;
             _settings = game.GameSettings;
-            _desktop = BuildSettingsUI();
+            _mainPanel = BuildSettingsUI();
         }
 
-        private Desktop BuildSettingsUI()
+        private Panel BuildSettingsUI()
         {
-            var rootPanel = new VerticalStackPanel {
-                Spacing = 8,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Top,
-                Padding = new Myra.Graphics2D.Thickness(0, 2, 0, 0)
-            };
-            var title = new Label
+            var panel = new Panel(new Vector2(700, 540), PanelSkin.Simple, Anchor.Center)
             {
-                Text = "Settings",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                TextColor = TitleColor,
-                Padding = new Myra.Graphics2D.Thickness(0, 2, 0, 2),
-                Font = _game.FontSystemBold.GetFont(40)
+                Padding = new Vector2(32, 32),
+                FillColor = new Color(40, 40, 60)
             };
-            rootPanel.Widgets.Add(title);
-
-            // Tab buttons with improved highlight and spacing
-            var tabPanel = new HorizontalStackPanel { Spacing = 2, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top }; // Center for tab buttons
-            var tabFont = _game.FontSystemBold.GetFont(22);
-            var videoTab = CreateTabButton("Video", tabFont);
-            var audioTab = CreateTabButton("Audio", tabFont);
-            var gameTab = CreateTabButton("Game", tabFont);
-            var inputTab = CreateTabButton("Input", tabFont);
-            tabPanel.Widgets.Add(videoTab);
-            tabPanel.Widgets.Add(audioTab);
-            tabPanel.Widgets.Add(gameTab);
-            tabPanel.Widgets.Add(inputTab);
-            rootPanel.Widgets.Add(tabPanel);
-
-            // Card drop shadow (fake with offset panel)
-            var windowWidth = _game.GraphicsDevice.Viewport.Width;
-            var minCardWidth = windowWidth > 40 ? windowWidth - 40 : 600;
-            var cardShadow = new Panel {
-                Background = new SolidBrush(new Color(20, 22, 32, 180)),
-                Padding = new Myra.Graphics2D.Thickness(CardPadding),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Myra.Graphics2D.Thickness(20, 0, 20, 0),
-                MinHeight = 400,
-                MinWidth = minCardWidth,
-                Left = 0, Top = 8 // offset for shadow effect
-            };
-
-            // Card panel for content with border, padding
-            var cardGrid = new Grid {
-                Padding = new Myra.Graphics2D.Thickness(CardPadding),
-                Background = new SolidBrush(CardBackgroundColor),
-                Border = new SolidBrush(CardBorderColor),
-                BorderThickness = new Myra.Graphics2D.Thickness(3),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Myra.Graphics2D.Thickness(20, 0, 20, 0),
-                MinHeight = 400,
-                MinWidth = minCardWidth
-            };
-            cardGrid.RowsProportions.Add(new Proportion(ProportionType.Fill)); // Content
-            cardGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // Buttons
-
-            // Placeholder for tab content
-            var contentPanel = new Panel { Id = "SettingsContentPanel", Padding = new Myra.Graphics2D.Thickness(24, 8, 24, 8) };
-            Grid.SetRow(contentPanel, 0);
-            cardGrid.Widgets.Add(contentPanel);
-
-            // Save/Apply/Reset buttons at the bottom right, with extra spacing and top border
-            var buttonRow = new HorizontalStackPanel {
-                Spacing = 16,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Padding = new Myra.Graphics2D.Thickness(0, 18, 0, 0) // space above buttons
-            };
-            var saveButton = CreateActionButton("Save");
-            var applyButton = CreateActionButton("Apply");
-            var resetButton = CreateActionButton("Reset");
-            buttonRow.Widgets.Add(saveButton);
-            buttonRow.Widgets.Add(applyButton);
-            buttonRow.Widgets.Add(resetButton);
-            // Add a subtle top border for separation
-            var buttonRowPanel = new Panel {
-                Padding = new Myra.Graphics2D.Thickness(0, 0, 0, 0),
-                Background = null // transparent
-            };
-            buttonRowPanel.Widgets.Add(new Panel {
-                Height = 1,
-                Background = new SolidBrush(new Color(120, 140, 200, 60)),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Top
-            });
-            buttonRowPanel.Widgets.Add(buttonRow);
-            Grid.SetRow(buttonRowPanel, 1);
-            cardGrid.Widgets.Add(buttonRowPanel);
-
-            // Layer shadow and card
-            var cardStack = new Panel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Top };
-            cardStack.Widgets.Add(cardShadow);
-            cardStack.Widgets.Add(cardGrid);
-            rootPanel.Widgets.Add(cardStack);
-
-            // Set up tab switching with improved highlight and section heading
-            void SelectTab(string tab)
+            // Title
+            var title = new Header("Settings")
             {
-                _selectedTab = tab;
-                SetTabContent(contentPanel, tab);
-                // Update tab button styles and highlight
-                foreach (var btn in new[] { videoTab, audioTab, gameTab, inputTab })
-                {
-                    btn.Background = ButtonBrush;
-                    btn.Border = null;
-                    btn.BorderThickness = new Myra.Graphics2D.Thickness(0);
-                    ((Label)btn.Content).TextColor = ButtonTextColor;
-                    ((Label)btn.Content).Font = tabFont;
-                }
-                Button selectedBtn = tab == "Video" ? videoTab : tab == "Audio" ? audioTab : tab == "Game" ? gameTab : inputTab;
-                selectedBtn.Background = new SolidBrush(TabHighlightColor);
-                selectedBtn.Border = new SolidBrush(Color.White);
-                selectedBtn.BorderThickness = new Myra.Graphics2D.Thickness(0, 0, 0, 4);
-                ((Label)selectedBtn.Content).TextColor = Color.White;
-                ((Label)selectedBtn.Content).Font = _game.FontSystemBold.GetFont(24); // slightly larger for selected
-                // No section heading update
+                Anchor = Anchor.TopCenter,
+                FillColor = new Color(220, 220, 255),
+                Padding = new Vector2(0, 32),
+                Scale = 1.6f
+            };
+            panel.AddChild(title);
+            panel.AddChild(new Paragraph("") { Scale = 0.7f }); // spacing below title
+            // Create a vertical container for tabs and content
+            var tabsAndContentContainer = new Panel(new Vector2(600, 320), PanelSkin.None, Anchor.Center)
+            {
+                Padding = new Vector2(0, 0),
+                Offset = new Vector2(0, 16)
+            };
+            var tabPanel = new Panel(new Vector2(600, 48), PanelSkin.None, Anchor.TopCenter)
+            {
+                Padding = new Vector2(0, 0)
+            };
+            var tabWidth = 140f;
+            var tabSpacing = 10f;
+            var videoTab = CreateTabButton("Video", tabWidth);
+            var audioTab = CreateTabButton("Audio", tabWidth);
+            var inputTab = CreateTabButton("Input", tabWidth);
+            var gameTab = CreateTabButton("Game", tabWidth);
+            videoTab.Anchor = Anchor.CenterLeft;
+            audioTab.Anchor = Anchor.CenterLeft;
+            inputTab.Anchor = Anchor.CenterLeft;
+            gameTab.Anchor = Anchor.CenterLeft;
+            videoTab.Offset = new Vector2(0, 0);
+            audioTab.Offset = new Vector2(tabWidth + tabSpacing, 0);
+            inputTab.Offset = new Vector2((tabWidth + tabSpacing) * 2, 0);
+            gameTab.Offset = new Vector2((tabWidth + tabSpacing) * 3, 0);
+            tabPanel.AddChild(videoTab);
+            tabPanel.AddChild(audioTab);
+            tabPanel.AddChild(inputTab);
+            tabPanel.AddChild(gameTab);
+            videoTab.OnClick = (Entity btn) => SelectTab("Video", videoTab, audioTab, inputTab, gameTab);
+            audioTab.OnClick = (Entity btn) => SelectTab("Audio", videoTab, audioTab, inputTab, gameTab);
+            inputTab.OnClick = (Entity btn) => SelectTab("Input", videoTab, audioTab, inputTab, gameTab);
+            gameTab.OnClick = (Entity btn) => SelectTab("Game", videoTab, audioTab, inputTab, gameTab);
+            // Tab content panel
+            _tabContentPanel = new Panel(new Vector2(600, 260), PanelSkin.Simple, Anchor.Auto)
+            {
+                Padding = new Vector2(24, 18),
+                FillColor = new Color(50, 54, 70)
+            };
+            // Add tabPanel and content panel to container
+            tabsAndContentContainer.AddChild(tabPanel);
+            tabsAndContentContainer.AddChild(_tabContentPanel);
+            // Add container to main panel
+            panel.AddChild(tabsAndContentContainer);
+
+            // Action buttons + Back button (horizontal, centered at bottom)
+            var buttonPanel = new Panel(new Vector2(640, 48), PanelSkin.None, Anchor.BottomCenter)
+            {
+                Padding = new Vector2(0, 24)
+            };
+            var saveButton = new Button("Save", ButtonSkin.Default) { Size = new Vector2(140, 38), Scale = 1.2f };
+            var resetButton = new Button("Reset", ButtonSkin.Default) { Size = new Vector2(140, 38), Scale = 1.2f };
+            var backButton = new Button("Back", ButtonSkin.Default) { Size = new Vector2(140, 38), Scale = 1.2f };
+            saveButton.Anchor = Anchor.CenterLeft;
+            resetButton.Anchor = Anchor.CenterLeft;
+            backButton.Anchor = Anchor.CenterLeft;
+            saveButton.Offset = new Vector2(0, 0);
+            resetButton.Offset = new Vector2(160, 0);
+            backButton.Offset = new Vector2(320, 0);
+            backButton.FillColor = new Color(36, 44, 66);
+            if (backButton.Children.Count > 0 && backButton.Children[0] is Label label)
+            {
+                label.FillColor = Color.White;
+                label.Scale = 1.2f;
             }
-            videoTab.Click += (s, a) => SelectTab("Video");
-            audioTab.Click += (s, a) => SelectTab("Audio");
-            gameTab.Click += (s, a) => SelectTab("Game");
-            inputTab.Click += (s, a) => SelectTab("Input");
-            // Default tab
-            SelectTab("Video");
+            backButton.OnMouseEnter = (Entity btn) => backButton.FillColor = new Color(50, 70, 110);
+            backButton.OnMouseLeave = (Entity btn) => backButton.FillColor = new Color(36, 44, 66);
+            backButton.OnMouseDown = (Entity btn) => backButton.FillColor = new Color(70, 90, 130);
+            backButton.OnClick = (Entity btn) => _game.SwitchToMenu();
+            buttonPanel.AddChild(saveButton);
+            buttonPanel.AddChild(resetButton);
+            buttonPanel.AddChild(backButton);
+            panel.AddChild(buttonPanel);
 
-            // Back button in top right with icon and rounded corners
-            var backButtonPanel = new Panel {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Top,
-                Padding = new Myra.Graphics2D.Thickness(0, 12, 20, 0)
-            };
-            var backButton = new Button
+            // Select default tab
+            SelectTab(_selectedTab, videoTab, audioTab, inputTab, gameTab);
+
+            return panel;
+        }
+
+        private Button CreateTabButton(string text, float width)
+        {
+            var button = new Button(text, ButtonSkin.Default)
             {
-                Width = 120,
-                Height = 40,
-                Background = new SolidBrush(new Color(36, 44, 66)),
-                OverBackground = new SolidBrush(new Color(50, 70, 110)),
-                PressedBackground = new SolidBrush(new Color(70, 90, 130)),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Border = new SolidBrush(Color.Black),
-                BorderThickness = new Myra.Graphics2D.Thickness(2),
-                Padding = new Myra.Graphics2D.Thickness(0, 0, 0, 0)
+                Size = new Vector2(width, 38),
+                Anchor = Anchor.Auto,
+                Scale = 1.2f
             };
-            var backLabel = new Label {
-                Text = "\u2190  Back", // Unicode left arrow
-                TextColor = ButtonTextColor,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Font = _game.FontSystemBold.GetFont(20)
-            };
-            backButton.Content = backLabel;
-            backButton.Click += (s, a) => _game.SwitchToMenu();
-            backButtonPanel.Widgets.Add(backButton);
-            // Use a Grid to overlay the back button in the top right
-            var overlayGrid = new Grid();
-            overlayGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
-            overlayGrid.RowsProportions.Add(new Proportion(ProportionType.Fill));
-            overlayGrid.ColumnsProportions.Add(new Proportion(ProportionType.Fill));
-            overlayGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-            overlayGrid.Widgets.Add(backButtonPanel);
-            Grid.SetRow(backButtonPanel, 0);
-            Grid.SetColumn(backButtonPanel, 1);
-            // Main content panel (rootPanel) in row 1, column 0-1
-            overlayGrid.Widgets.Add(rootPanel);
-            Grid.SetRow(rootPanel, 1);
-            Grid.SetColumn(rootPanel, 0);
-            Grid.SetColumnSpan(rootPanel, 2);
-            var desktop = new Desktop { Root = overlayGrid };
-            desktop.Background = MenuBackgroundBrush;
-            return desktop;
-        }
-
-        private Button CreateTabButton(string text, DynamicSpriteFont font)
-        {
-            var button = new Button { Width = 120, Height = 38, Padding = new Myra.Graphics2D.Thickness(0, 2, 0, 2) };
-            var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, TextColor = ButtonTextColor, Font = font };
-            button.Content = label;
-            button.Background = ButtonBrush;
-            button.OverBackground = ButtonHoverBrush;
-            button.PressedBackground = ButtonPressedBrush;
+            button.FillColor = new Color(36, 44, 66);
+            if (button.Children.Count > 0 && button.Children[0] is Label label)
+            {
+                label.FillColor = Color.White;
+                label.Scale = 1.2f;
+            }
+            button.OnMouseEnter = (Entity btn) => button.FillColor = new Color(50, 70, 110);
+            button.OnMouseLeave = (Entity btn) => button.FillColor = new Color(36, 44, 66);
+            button.OnMouseDown = (Entity btn) => button.FillColor = new Color(70, 90, 130);
             return button;
         }
 
-        private Button CreateActionButton(string text)
+        private void SelectTab(string tab, Button videoTab, Button audioTab, Button inputTab, Button gameTab)
         {
-            var button = new Button { Width = 100, Height = 36, Border = new SolidBrush(Color.Black), BorderThickness = new Myra.Graphics2D.Thickness(2) };
-            var label = new Label { Text = text, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, TextColor = ButtonTextColor, Font = _game.FontSystemBold.GetFont(18) };
-            button.Content = label;
-            button.Background = ButtonBrush;
-            button.OverBackground = ButtonHoverBrush;
-            button.PressedBackground = ButtonPressedBrush;
-            return button;
-        }
-
-        private void SetTabContent(Panel contentPanel, string tab)
-        {
-            contentPanel.Widgets.Clear();
-            Widget tabContent = null;
+            _selectedTab = tab;
+            var tabButtons = new[] { videoTab, audioTab, inputTab, gameTab };
+            foreach (var btn in tabButtons)
+            {
+                btn.FillColor = new Color(36, 44, 66);
+                if (btn.Children.Count > 0 && btn.Children[0] is Label label)
+                {
+                    label.FillColor = Color.White;
+                }
+            }
+            Button selectedBtn = tab == "Video" ? videoTab : tab == "Audio" ? audioTab : tab == "Input" ? inputTab : gameTab;
+            selectedBtn.FillColor = new Color(120, 160, 255);
+            if (selectedBtn.Children.Count > 0 && selectedBtn.Children[0] is Label selectedLabel)
+            {
+                selectedLabel.FillColor = Color.White;
+            }
+            _tabContentPanel.ClearChildren();
+            Entity tabContent = null;
             switch (tab)
             {
-                case "Video":
-                    tabContent = VideoSettingsPanel.Build(_settings, ButtonTextColor); // Ensure no heading in panel
-                    break;
-                case "Audio":
-                    tabContent = AudioSettingsPanel.Build(_settings, ButtonTextColor);
-                    break;
-                case "Game":
-                    tabContent = GameSettingsPanel.Build(_settings, ButtonTextColor);
-                    break;
-                case "Input":
-                    tabContent = InputSettingsPanel.Build(_settings, TitleColor, ButtonTextColor);
-                    break;
+                case "Video": tabContent = BuildVideoSettingsPanel(); break;
+                case "Audio": tabContent = BuildAudioSettingsPanel(); break;
+                case "Input": tabContent = BuildInputSettingsPanel(); break;
+                case "Game": tabContent = BuildGameSettingsPanel(); break;
             }
-            // Only add tab content, do not add duplicate heading
-            if (tabContent != null)
+            if (tabContent != null) _tabContentPanel.AddChild(tabContent);
+        }
+
+        private Entity BuildVideoSettingsPanel()
+        {
+            var panel = new Panel(new Vector2(0, 0), PanelSkin.None, Anchor.Auto) { Padding = Vector2.Zero };
+            panel.AddChild(new Header("Video Settings") { FillColor = Color.White, Scale = 1.2f, Padding = Vector2.Zero, Offset = new Vector2(0, -8) });
+
+            // Grid container for settings (vertical stack)
+            var grid = new Panel(new Vector2(540, 90), PanelSkin.None, Anchor.Auto)
             {
-                contentPanel.Widgets.Add(tabContent);
+                Padding = new Vector2(0, 0)
+            };
+
+            // --- Fullscreen row ---
+            var fullscreenRow = new Panel(new Vector2(540, 36), PanelSkin.None, Anchor.Auto)
+            {
+                Padding = new Vector2(0, 0)
+            };
+            var fullscreenLabel = new Paragraph("Fullscreen", Anchor.CenterLeft)
+            {
+                FillColor = Color.White,
+                Scale = 1.1f,
+                Size = new Vector2(200, 36)
+            };
+            var fullscreenCheckbox = new CheckBox("")
+            {
+                Checked = _settings.VideoSettings.Fullscreen,
+                Anchor = Anchor.CenterRight,
+                Scale = 1.25f, // slightly larger for better balance
+                Size = new Vector2(40, 40),
+                Offset = new Vector2(0, 4) // lower for better vertical alignment
+            };
+            fullscreenCheckbox.OnValueChange = (e) => _settings.VideoSettings.Fullscreen = fullscreenCheckbox.Checked;
+            fullscreenRow.AddChild(fullscreenLabel);
+            fullscreenRow.AddChild(fullscreenCheckbox);
+
+            // --- Divider ---
+            var divider = new Panel(new Vector2(500, 1), PanelSkin.None, Anchor.Auto)
+            {
+                FillColor = new Color(120, 120, 160), // lighter color for modern look
+                Offset = new Vector2(0, 2) // less vertical space
+            };
+
+            // --- Resolution row ---
+            var resRow = new Panel(new Vector2(540, 36), PanelSkin.None, Anchor.Auto)
+            {
+                Padding = new Vector2(0, 0)
+            };
+            var resLabel = new Paragraph("Resolution", Anchor.CenterLeft)
+            {
+                FillColor = Color.White,
+                Scale = 1.1f,
+                Size = new Vector2(200, 36)
+            };
+            var resolutionDropdown = new DropDown(new Vector2(200, 36), Anchor.CenterRight)
+            {
+                Scale = 1.1f,
+                Offset = new Vector2(0, 2) // match vertical alignment with checkbox
+            };
+            var resolutions = new[] { "1920x1080", "1600x900", "1280x720" };
+            foreach (var res in resolutions) resolutionDropdown.AddItem(res);
+            int resIndex = System.Array.IndexOf(resolutions, _settings.VideoSettings.Resolution);
+            resolutionDropdown.SelectedIndex = resIndex >= 0 ? resIndex : 0;
+            resolutionDropdown.OnValueChange = (e) => _settings.VideoSettings.Resolution = resolutionDropdown.SelectedValue;
+            resRow.AddChild(resLabel);
+            resRow.AddChild(resolutionDropdown);
+
+            // Add rows to grid
+            grid.AddChild(fullscreenRow);
+            grid.AddChild(divider);
+            grid.AddChild(resRow);
+
+            // Add grid to main panel
+            panel.AddChild(grid);
+
+            return panel;
+        }
+
+        private Entity BuildAudioSettingsPanel()
+        {
+            var panel = new Panel(new Vector2(0, 0), PanelSkin.None, Anchor.Auto) { Padding = Vector2.Zero };
+            panel.AddChild(new Header("Audio Settings") { FillColor = Color.White, Scale = 1.2f, Padding = Vector2.Zero, Offset = new Vector2(0, -8) });
+            // Music Volume row
+            var musicRow = new Panel(new Vector2(540, 36), PanelSkin.None, Anchor.Auto)
+            {
+                Padding = new Vector2(16, 0)
+            };
+            var musicLabel = new Paragraph("Music Volume", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.1f };
+            var musicSlider = new Slider(0, 100, new Vector2(140, 24), SliderSkin.Default, Anchor.Center) { Scale = 1.1f };
+            musicSlider.Value = _settings.AudioSettings.MusicVolume;
+            var musicValueLabel = new Paragraph($"{musicSlider.Value}%", Anchor.CenterRight) { FillColor = Color.White, Scale = 1.1f, Offset = new Vector2(24, 0) };
+            musicSlider.OnValueChange = (e) => {
+                _settings.AudioSettings.MusicVolume = musicSlider.Value;
+                musicValueLabel.Text = $"{musicSlider.Value}%";
+            };
+            musicRow.AddChild(musicLabel);
+            musicRow.AddChild(musicSlider);
+            musicRow.AddChild(musicValueLabel);
+            panel.AddChild(musicRow);
+            // SFX Volume row
+            var sfxRow = new Panel(new Vector2(540, 36), PanelSkin.None, Anchor.Auto)
+            {
+                Padding = new Vector2(16, 0)
+            };
+            var sfxLabel = new Paragraph("SFX Volume", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.1f };
+            var sfxSlider = new Slider(0, 100, new Vector2(140, 24), SliderSkin.Default, Anchor.Center) { Scale = 1.1f };
+            sfxSlider.Value = _settings.AudioSettings.SfxVolume;
+            var sfxValueLabel = new Paragraph($"{sfxSlider.Value}%", Anchor.CenterRight) { FillColor = Color.White, Scale = 1.1f, Offset = new Vector2(24, 0) };
+            sfxSlider.OnValueChange = (e) => {
+                _settings.AudioSettings.SfxVolume = sfxSlider.Value;
+                sfxValueLabel.Text = $"{sfxSlider.Value}%";
+            };
+            sfxRow.AddChild(sfxLabel);
+            sfxRow.AddChild(sfxSlider);
+            sfxRow.AddChild(sfxValueLabel);
+            panel.AddChild(sfxRow);
+            return panel;
+        }
+
+        private Entity BuildInputSettingsPanel()
+        {
+            var panel = new Panel(new Vector2(0, 0), PanelSkin.None, Anchor.Auto) { Padding = Vector2.Zero };
+            panel.AddChild(new Header("Input Settings") { FillColor = Color.White, Scale = 1.2f, Padding = Vector2.Zero, Offset = new Vector2(0, -8) });
+            panel.AddChild(new Paragraph("Player 1 Input Type:", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.1f });
+            var p1InputDropdown = new DropDown(new Vector2(180, 36), Anchor.CenterLeft) { Scale = 1.1f };
+            p1InputDropdown.AddItem("Keyboard");
+            p1InputDropdown.AddItem("Controller");
+            p1InputDropdown.SelectedIndex = _settings.InputSettings.Player1.ControllerEnabled ? 1 : 0;
+            p1InputDropdown.OnValueChange = (e) => {
+                _settings.InputSettings.Player1.ControllerEnabled = p1InputDropdown.SelectedIndex == 1;
+                _settings.InputSettings.Player1.KeyboardEnabled = p1InputDropdown.SelectedIndex == 0;
+            };
+            panel.AddChild(p1InputDropdown);
+            panel.AddChild(new Paragraph("Player 2 Input Type:", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.1f });
+            var p2InputDropdown = new DropDown(new Vector2(180, 36), Anchor.CenterLeft) { Scale = 1.1f };
+            p2InputDropdown.AddItem("Keyboard");
+            p2InputDropdown.AddItem("Controller");
+            p2InputDropdown.SelectedIndex = _settings.InputSettings.Player2.ControllerEnabled ? 1 : 0;
+            p2InputDropdown.OnValueChange = (e) => {
+                _settings.InputSettings.Player2.ControllerEnabled = p2InputDropdown.SelectedIndex == 1;
+                _settings.InputSettings.Player2.KeyboardEnabled = p2InputDropdown.SelectedIndex == 0;
+            };
+            panel.AddChild(p2InputDropdown);
+
+            // --- Player 1 Keybindings ---
+            var p1Keybindings = _settings.InputSettings.Player1.KeyBindings; // Dictionary<string, string>
+            panel.AddChild(new Paragraph("Player 1 Keybindings:", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.0f, Offset = new Vector2(0, 8) });
+            var p1Grid = new Panel(new Vector2(400, 0), PanelSkin.None, Anchor.Auto) { Padding = new Vector2(0, 0) };
+            foreach (var kvp in p1Keybindings)
+            {
+                var row = new Panel(new Vector2(400, 28), PanelSkin.None, Anchor.Auto) { Padding = new Vector2(0, 0) };
+                row.AddChild(new Paragraph(kvp.Key, Anchor.CenterLeft) { Size = new Vector2(180, 28), FillColor = Color.White, Scale = 1.0f });
+                row.AddChild(new Paragraph(kvp.Value, Anchor.Center) { Size = new Vector2(100, 28), FillColor = Color.LightGray, Scale = 1.0f });
+                var editBtn = new Button("Edit", ButtonSkin.Default) { Size = new Vector2(60, 24), Scale = 0.9f, Anchor = Anchor.CenterRight };
+                // editBtn.OnClick = ... (add your rebinding logic here)
+                row.AddChild(editBtn);
+                p1Grid.AddChild(row);
             }
-            // No section heading update
+            panel.AddChild(p1Grid);
+
+            // --- Player 2 Keybindings ---
+            var p2Keybindings = _settings.InputSettings.Player2.KeyBindings; // Dictionary<string, string>
+            panel.AddChild(new Paragraph("Player 2 Keybindings:", Anchor.CenterLeft) { FillColor = Color.White, Scale = 1.0f, Offset = new Vector2(0, 8) });
+            var p2Grid = new Panel(new Vector2(400, 0), PanelSkin.None, Anchor.Auto) { Padding = new Vector2(0, 0) };
+            foreach (var kvp in p2Keybindings)
+            {
+                var row = new Panel(new Vector2(400, 28), PanelSkin.None, Anchor.Auto) { Padding = new Vector2(0, 0) };
+                row.AddChild(new Paragraph(kvp.Key, Anchor.CenterLeft) { Size = new Vector2(180, 28), FillColor = Color.White, Scale = 1.0f });
+                row.AddChild(new Paragraph(kvp.Value, Anchor.Center) { Size = new Vector2(100, 28), FillColor = Color.LightGray, Scale = 1.0f });
+                var editBtn = new Button("Edit", ButtonSkin.Default) { Size = new Vector2(60, 24), Scale = 0.9f, Anchor = Anchor.CenterRight };
+                // editBtn.OnClick = ... (add your rebinding logic here)
+                row.AddChild(editBtn);
+                p2Grid.AddChild(row);
+            }
+            panel.AddChild(p2Grid);
+
+            return panel;
+        }
+
+        private Entity BuildGameSettingsPanel()
+        {
+            var panel = new Panel(new Vector2(0, 0), PanelSkin.None, Anchor.Auto) { Padding = Vector2.Zero };
+            panel.AddChild(new Header("Game Settings") { FillColor = Color.White, Scale = 1.2f, Padding = Vector2.Zero, Offset = new Vector2(0, -8) });
+            var showFpsCheckbox = new CheckBox("Show FPS") { Checked = _settings.GameSettingsSection.ShowFPS, Anchor = Anchor.CenterLeft, Scale = 1.1f };
+            showFpsCheckbox.OnValueChange = (e) => _settings.GameSettingsSection.ShowFPS = showFpsCheckbox.Checked;
+            panel.AddChild(showFpsCheckbox);
+            var debugCheckbox = new CheckBox("Show Debug Info") { Checked = _settings.GameSettingsSection.ShowDebugInfo, Anchor = Anchor.CenterLeft, Scale = 1.1f };
+            debugCheckbox.OnValueChange = (e) => _settings.GameSettingsSection.ShowDebugInfo = debugCheckbox.Checked;
+            panel.AddChild(debugCheckbox);
+            var controllerCheckbox = new CheckBox("Controller Support") { Checked = _settings.GameSettingsSection.ControllerSupport, Anchor = Anchor.CenterLeft, Scale = 1.1f };
+            controllerCheckbox.OnValueChange = (e) => _settings.GameSettingsSection.ControllerSupport = controllerCheckbox.Checked;
+            panel.AddChild(controllerCheckbox);
+            return panel;
         }
 
         public void Update(GameTime gameTime) { }
-        public void Draw(SpriteBatch spriteBatch) { }
-        public Desktop GetMyraDesktop() => _desktop;
+        public void Draw(SpriteBatch spriteBatch) { /* GeonBit.UI is drawn by main loop */ }
+        public Panel GetGeonBitPanel() => _mainPanel;
     }
 }
