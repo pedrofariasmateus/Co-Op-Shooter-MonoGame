@@ -15,6 +15,8 @@ namespace MonoGame2DShooterPrototype.Source.Screens
 
     public class GameScreen : IGameScreen
     {
+        // Shared score for both players
+        private int score = 0;
         // Queue for batching enemy destroyed events
         private readonly List<(Entities.Enemy enemy, Entities.Bullet bullet)> enemyDestroyedQueue = new();
         // Spatial grid settings
@@ -270,6 +272,7 @@ namespace MonoGame2DShooterPrototype.Source.Screens
             for (int i = 0; i < enemyDestroyedQueue.Count && processed < maxExplosionsPerFrame; i++, processed++)
             {
                 var (enemy, bullet) = enemyDestroyedQueue[i];
+                score += 100; // Example: 100 points per enemy destroyed
                 GameEvents.RaiseEnemyDestroyed(enemy, bullet);
             }
             if (processed > 0)
@@ -307,10 +310,10 @@ namespace MonoGame2DShooterPrototype.Source.Screens
                 if (entity is Entities.Bullet bullet && bullet.IsActive) bulletCount++;
                 else if (entity is Entities.Enemy enemy && enemy.IsActive) enemyCount++;
             }
-            // Draw counters in top-left (requires a SpriteFont called 'DefaultFont' in Content)
+            // Draw counters and score in top-left (requires a SpriteFont called 'DefaultFont' in Content)
             if (debugFont != null)
             {
-                string text = $"Bullets: {bulletCount}\nEnemies: {enemyCount}";
+                string text = $"Score: {score}\nBullets: {bulletCount}\nEnemies: {enemyCount}";
                 spriteBatch.DrawString(debugFont, text, new Vector2(10, 10), Color.Yellow);
             }
             // Optionally, draw test mode indicator
