@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MonoGame2DShooterPrototype")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b10a25c291967986e7b364d8dfddec0973280b1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2f69284d3ae6f51f790ce0f81c231c0c623f0186")]
 [assembly: System.Reflection.AssemblyProductAttribute("MonoGame2DShooterPrototype")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MonoGame2DShooterPrototype")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

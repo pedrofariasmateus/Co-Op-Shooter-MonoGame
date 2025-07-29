@@ -106,3 +106,4 @@ TestResults/
 *.sln.ide
 *.sln.ide.*
 # End of file
+.ssh/
