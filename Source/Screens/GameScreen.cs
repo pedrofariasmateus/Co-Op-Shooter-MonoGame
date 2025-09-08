@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame2DShooterPrototype.Source.Core;
 using Entities = MonoGame2DShooterPrototype.Source.Entities;
 using MonoGame2DShooterPrototype.Source.Entities;
+using MonoGame2DShooterPrototype.Source.UI;
+using static MonoGame2DShooterPrototype.Source.Core.GameStateManager;
 
 namespace MonoGame2DShooterPrototype.Source.Screens
 {
@@ -41,6 +43,11 @@ namespace MonoGame2DShooterPrototype.Source.Screens
         private bool testModeActive = false;
         private bool lastTestKey = false;
         private SpriteFont debugFont;
+        private GameHUD _gameHUD;
+        private VisualEffects _visualEffects;
+        private GameBackground _gameBackground;
+        private GameStateManager _gameStateManager;
+        private ScorePopupManager _scorePopupManager;
 
         public GameScreen(GraphicsDevice graphicsDevice, GameSettings settings)
         {
@@ -52,6 +59,17 @@ namespace MonoGame2DShooterPrototype.Source.Screens
         {
             // Load debug font (ensure you have a SpriteFont asset named 'DefaultFont' in your Content project)
             debugFont = content.Load<SpriteFont>("DefaultFont");
+
+            // Initialize UI components
+            _gameHUD = new GameHUD(graphicsDevice, debugFont);
+            _visualEffects = new VisualEffects(graphicsDevice);
+            _gameBackground = new GameBackground(graphicsDevice);
+            _gameStateManager = new GameStateManager();
+            _scorePopupManager = new ScorePopupManager(debugFont);
+            
+            // Initialize the first wave
+            _gameStateManager.StartNewWave(1, 60f);
+            _gameBackground = new GameBackground(graphicsDevice);
 
             // Initialize grid
             enemyGrid = new Utilities.SpatialGrid<Entities.Enemy>(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, GridCellSize);
@@ -98,6 +116,21 @@ namespace MonoGame2DShooterPrototype.Source.Screens
 
         public void Update(GameTime gameTime)
         {
+            var keyboardState = Keyboard.GetState();
+            
+            // Update game state manager
+            _gameStateManager.Update(gameTime, keyboardState);
+            
+            // Only update game logic if playing
+            if (_gameStateManager.CurrentState != GamePlayState.Playing)
+            {
+                // Update UI elements even when paused/game over
+                _visualEffects.Update(gameTime);
+                _gameBackground.Update(gameTime);
+                _scorePopupManager.Update(gameTime);
+                return;
+            }
+
             var sw = System.Diagnostics.Stopwatch.StartNew();
             // --- Spatial grid update for enemies and bullets (optimized) ---
             var allEntities = entityManager.GetEntities();
@@ -128,7 +161,6 @@ namespace MonoGame2DShooterPrototype.Source.Screens
             entityManager.Update(gameTime, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
             sw.Restart();
 
-            KeyboardState keyboardState = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
 #if DEBUG
             // Test mode: spawn 1000 bullets when T is pressed
@@ -177,6 +209,12 @@ namespace MonoGame2DShooterPrototype.Source.Screens
                             Vector2 spawnOffset1 = GetBulletSpawnOffset(dir1, player1.Texture, bulletTexture);
                             var bullet = bulletManager.SpawnBullet(player1.Position + spawnOffset1, dir1);
                             entityManager.Register(bullet);
+                            
+                            // Create bullet trail effect
+                            Vector2 trailStart = player1.Position + spawnOffset1;
+                            Vector2 trailEnd = trailStart + dir1 * 20;
+                            _visualEffects.CreateBulletTrail(trailStart, trailEnd, Color.Yellow);
+                            
                             lastShootP1 = true;
                         }
                     }
@@ -272,8 +310,34 @@ namespace MonoGame2DShooterPrototype.Source.Screens
             for (int i = 0; i < enemyDestroyedQueue.Count && processed < maxExplosionsPerFrame; i++, processed++)
             {
                 var (enemy, bullet) = enemyDestroyedQueue[i];
-                score += 100; // Example: 100 points per enemy destroyed
+                
+                // Add combo and calculate score
+                _gameStateManager.AddCombo();
+                int baseScore = 100;
+                int multiplier = _gameStateManager.GetScoreMultiplier();
+                int earnedScore = baseScore * multiplier;
+                score += earnedScore;
+                
                 GameEvents.RaiseEnemyDestroyed(enemy, bullet);
+                
+                // Create explosion effect at enemy position
+                if (enemy != null)
+                {
+                    _visualEffects.CreateExplosion(enemy.Position, Color.Orange, 15);
+                    _visualEffects.CreateHitEffect(enemy.Position, Color.Red);
+                    
+                    // Add score popup
+                    _scorePopupManager.AddScorePopup(enemy.Position, earnedScore, Color.Gold);
+                    
+                    // Add combo popup if combo > 1
+                    if (_gameStateManager.ComboCount > 1)
+                    {
+                        _scorePopupManager.AddTextPopup(
+                            enemy.Position + new Vector2(0, -20), 
+                            $"COMBO x{_gameStateManager.ComboCount}!", 
+                            Color.Yellow, 1.0f);
+                    }
+                }
             }
             if (processed > 0)
                 enemyDestroyedQueue.RemoveRange(0, processed);
@@ -285,6 +349,15 @@ namespace MonoGame2DShooterPrototype.Source.Screens
 
             // Remove inactive entities (bullets, enemies, etc.) every frame
             entityManager.RemoveInactive();
+
+            // Update visual effects
+            _visualEffects.Update(gameTime);
+            
+            // Update background
+            _gameBackground.Update(gameTime);
+            
+            // Update score popups
+            _scorePopupManager.Update(gameTime);
         }
 
 
@@ -300,30 +373,84 @@ namespace MonoGame2DShooterPrototype.Source.Screens
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            // Draw background first
+            _gameBackground.Draw(spriteBatch);
+            
             entityManager.Draw(spriteBatch);
-#if DEBUG
-            // Draw bullet/enemy counters for performance measurement
+            
+            // Draw visual effects
+            _visualEffects.Draw(spriteBatch);
+            
+            // Draw score popups
+            _scorePopupManager.Draw(spriteBatch);
+
+            // Get entity counts for HUD
             int bulletCount = 0;
             int enemyCount = 0;
-            foreach (var entity in entityManager.GetEntities())
+            var allEntities = entityManager.GetEntities();
+            var enemyPositions = new System.Collections.Generic.List<Vector2>();
+            
+            foreach (var entity in allEntities)
             {
-                if (entity is Entities.Bullet bullet && bullet.IsActive) bulletCount++;
-                else if (entity is Entities.Enemy enemy && enemy.IsActive) enemyCount++;
+                if (entity is Entities.Bullet bullet && bullet.IsActive) 
+                    bulletCount++;
+                else if (entity is Entities.Enemy enemy && enemy.IsActive) 
+                {
+                    enemyCount++;
+                    enemyPositions.Add(enemy.Position);
+                }
             }
-            // Draw counters and score in top-left (requires a SpriteFont called 'DefaultFont' in Content)
+            
+            // Get player position for mini-map
+            Vector2 playerPos = Vector2.Zero;
+            foreach (var entity in allEntities)
+            {
+                if (entity is Entities.Player player)
+                {
+                    playerPos = player.Position;
+                    break;
+                }
+            }
+            
+            // Draw main HUD with enhanced info
             if (debugFont != null)
             {
-                string text = $"Score: {score}\nBullets: {bulletCount}\nEnemies: {enemyCount}";
-                spriteBatch.DrawString(debugFont, text, new Vector2(10, 10), Color.Yellow);
+                _gameHUD.Draw(spriteBatch, score, bulletCount, enemyCount, testModeActive, 
+                    _gameStateManager.PlayerHealth, _gameStateManager.CurrentWave, _gameStateManager.WaveTimeRemaining);
+                
+                // Draw weapon info
+                _gameHUD.DrawWeaponInfo(spriteBatch, _gameStateManager.CurrentWeapon, 
+                    _gameStateManager.CurrentAmmo, _gameStateManager.CurrentFireRate);
+                
+                // Draw power-up indicator
+                if (!string.IsNullOrEmpty(_gameStateManager.ActivePowerUp))
+                {
+                    _gameHUD.DrawPowerUpIndicator(spriteBatch, _gameStateManager.ActivePowerUp, 
+                        _gameStateManager.PowerUpTimeRemaining);
+                }
+                
+                // Draw combo indicator
+                if (_gameStateManager.ComboCount > 1)
+                {
+                    var viewport = graphicsDevice.Viewport;
+                    _gameHUD.DrawComboIndicator(spriteBatch, _gameStateManager.ComboCount, 
+                        new Vector2(viewport.Width / 2, 100));
+                }
+                
+                // Draw mini-map
+                var worldBounds = new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
+                _gameHUD.DrawMiniMap(spriteBatch, playerPos, enemyPositions, worldBounds);
             }
-            // Optionally, draw test mode indicator
-            if (testModeActive)
+            
+            // Draw game state overlays
+            if (_gameStateManager.CurrentState == GamePlayState.Paused)
             {
-                // Draw a simple red rectangle or text to indicate test mode (requires SpriteFont for text)
-                // Example: spriteBatch.Draw(...)
-                // For now, just leave as a comment
+                _gameHUD.DrawPauseScreen(spriteBatch);
             }
-#endif
+            else if (_gameStateManager.CurrentState == GamePlayState.GameOver)
+            {
+                _gameHUD.DrawGameOverScreen(spriteBatch, score, _gameStateManager.CurrentWave);
+            }
         }
 
         // Returns the direction vector based on movement keys pressed, defaults to up

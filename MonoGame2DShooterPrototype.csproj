@@ -32,10 +32,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FontStashSharp.MonoGame" Version="1.3.7" />
     <PackageReference Include="GeonBit.UI" Version="4.3.0.4" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
-    <PackageReference Include="Myra" Version="1.5.9" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\Arial-bold.ttf">

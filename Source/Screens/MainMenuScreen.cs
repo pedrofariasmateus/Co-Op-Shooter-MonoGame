@@ -93,7 +93,7 @@ namespace MonoGame2DShooterPrototype.Source.Screens
             // Draw the UI (background color should be set in Game.Draw)
             UserInterface.Active.Draw(spriteBatch);
         }
-        // Removed GetMyraDesktop (obsolete)
+
         public Panel GetGeonBitPanel() => _mainPanel;
     }
 }

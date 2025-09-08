@@ -3,8 +3,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Myra;
-using Myra.Graphics2D.UI;
 using MonoGame2DShooterPrototype.Source.Screens;
 using FontStashSharp;
 
@@ -36,6 +34,9 @@ namespace MonoGame2DShooterPrototype.Source.Core
             Content.RootDirectory = "Content";
             IsMouseVisible = true; // Show mouse cursor for GeonBit.UI
             GameSettings = GameSettings.Load();
+            
+            // Set window title
+            Window.Title = "MonoGame 2D Shooter Prototype v1.0";
         }
 
         protected override void LoadContent()
@@ -52,7 +53,6 @@ namespace MonoGame2DShooterPrototype.Source.Core
             // Initialize GeonBit.UI
             GeonBit.UI.UserInterface.Initialize(Content, GeonBit.UI.BuiltinThemes.hd);
 
-            MyraEnvironment.Game = this; // TODO: Remove after full migration
             _menuScreen = new MainMenuScreen(this);
             _settingsScreen = new SettingsScreen(this);
             _currentScreen = _menuScreen;
@@ -90,7 +90,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
             }
             else
             {
-                GraphicsDevice.Clear(Color.CornflowerBlue);
+                GraphicsDevice.Clear(new Color(5, 10, 20)); // Dark space background
                 _spriteBatch.Begin();
                 _currentScreen?.Draw(_spriteBatch);
                 _spriteBatch.End();
