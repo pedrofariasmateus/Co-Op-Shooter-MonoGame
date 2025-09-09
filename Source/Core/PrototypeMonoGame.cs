@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame2DShooterPrototype.Source.Screens;
 using FontStashSharp;
+using GeonBit.UI;
 
 namespace MonoGame2DShooterPrototype.Source.Core
 {
@@ -31,6 +32,8 @@ namespace MonoGame2DShooterPrototype.Source.Core
         public PrototypeMonoGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferHeight = 768;
+            _graphics.PreferredBackBufferWidth = 1024;
             Content.RootDirectory = "Content";
             IsMouseVisible = true; // Show mouse cursor for GeonBit.UI
             GameSettings = GameSettings.Load();
@@ -51,14 +54,14 @@ namespace MonoGame2DShooterPrototype.Source.Core
             _fontSystemBold.AddFont(File.ReadAllBytes(Path.Combine(Content.RootDirectory, "Arial-bold.ttf")));
 
             // Initialize GeonBit.UI
-            GeonBit.UI.UserInterface.Initialize(Content, GeonBit.UI.BuiltinThemes.hd);
+            UserInterface.Initialize(Content, BuiltinThemes.hd);
 
             _menuScreen = new MainMenuScreen(this);
             _settingsScreen = new SettingsScreen(this);
             _currentScreen = _menuScreen;
             // Add GeonBit main menu panel to UI
-            GeonBit.UI.UserInterface.Active.Clear();
-            GeonBit.UI.UserInterface.Active.AddEntity(_menuScreen.GetGeonBitPanel());
+            UserInterface.Active.Clear();
+            UserInterface.Active.AddEntity(_menuScreen.GetGeonBitPanel());
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,7 +69,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
             // Update GeonBit UI for both menu and settings screens
             if (_currentScreen is MainMenuScreen || _currentScreen is SettingsScreen)
             {
-                GeonBit.UI.UserInterface.Active.Update(gameTime);
+                UserInterface.Active.Update(gameTime);
             }
             else
             {
@@ -86,7 +89,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
             if (_currentScreen is MainMenuScreen || _currentScreen is SettingsScreen)
             {
                 GraphicsDevice.Clear(MainMenuScreen.MenuBackgroundColor);
-                GeonBit.UI.UserInterface.Active.Draw(_spriteBatch);
+                UserInterface.Active.Draw(_spriteBatch);
             }
             else
             {
@@ -105,7 +108,7 @@ namespace MonoGame2DShooterPrototype.Source.Core
             _gameScreen.LoadContent(Content);
             _currentScreen = _gameScreen;
             // Clear GeonBit UI (not used in gameplay)
-            GeonBit.UI.UserInterface.Active.Clear();
+            UserInterface.Active.Clear();
             _currentState = GameState.Playing;
         }
         public void SwitchToSettings()
@@ -115,8 +118,8 @@ namespace MonoGame2DShooterPrototype.Source.Core
             _settingsScreen = new SettingsScreen(this);
             _currentScreen = _settingsScreen;
             // Switch GeonBit UI to settings panel
-            GeonBit.UI.UserInterface.Active.Clear();
-            GeonBit.UI.UserInterface.Active.AddEntity(_settingsScreen.GetGeonBitPanel());
+            UserInterface.Active.Clear();
+            UserInterface.Active.AddEntity(_settingsScreen.GetGeonBitPanel());
             _currentState = GameState.Settings;
         }
         public void SwitchToMenu()
@@ -124,8 +127,8 @@ namespace MonoGame2DShooterPrototype.Source.Core
             _menuScreen = new MainMenuScreen(this);
             _currentScreen = _menuScreen;
             // Switch GeonBit UI to main menu
-            GeonBit.UI.UserInterface.Active.Clear();
-            GeonBit.UI.UserInterface.Active.AddEntity(_menuScreen.GetGeonBitPanel());
+            UserInterface.Active.Clear();
+            UserInterface.Active.AddEntity(_menuScreen.GetGeonBitPanel());
             _currentState = GameState.Menu;
         }
         public void QuitGame() => _currentState = GameState.Quit;

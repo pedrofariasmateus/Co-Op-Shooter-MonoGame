@@ -14,8 +14,8 @@ public class PlayerManager
     {
         var players = new List<IEntity>
         {
-            new Player(playerTexture, new Vector2(100, 200), settings.InputSettings.Player1, viewportWidth, viewportHeight),
-            new Player(playerTexture, new Vector2(300, 200), settings.InputSettings.Player2, viewportWidth, viewportHeight)
+            new Player(playerTexture, new Vector2(viewportWidth/2+viewportWidth*0.05f, viewportHeight/2), settings.InputSettings.Player1, viewportWidth, viewportHeight),
+            new Player(playerTexture, new Vector2(viewportWidth/2-viewportWidth*0.05f, viewportHeight/2), settings.InputSettings.Player2, viewportWidth, viewportHeight)
         };
         return players;
     }

@@ -20,7 +20,7 @@ public class BulletManager
         this.screenHeight = screenHeight;
         this.poolSize = poolSize;
 
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < this.poolSize; i++)
         {
             bulletPool.Enqueue(new Bullet(bulletTexture, Vector2.Zero, Vector2.Zero, screenWidth, screenHeight));
         }

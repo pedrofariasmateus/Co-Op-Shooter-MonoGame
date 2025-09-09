@@ -17,12 +17,14 @@ namespace MonoGame2DShooterPrototype.Source.UI
         private readonly Color _scoreColor = Color.Gold;
         private readonly Color _counterColor = Color.Cyan;
         private readonly Color _warningColor = Color.Red;
+        private readonly Viewport _screenView;
 
         public GameHUD(GraphicsDevice graphicsDevice, SpriteFont font, SpriteFont titleFont = null)
         {
             _graphicsDevice = graphicsDevice;
             _font = font;
             _titleFont = titleFont ?? font;
+            _screenView = _graphicsDevice.Viewport;
 
             // Create a 1x1 white pixel texture for drawing rectangles
             _pixelTexture = new Texture2D(graphicsDevice, 1, 1);
@@ -32,26 +34,24 @@ namespace MonoGame2DShooterPrototype.Source.UI
         public void Draw(SpriteBatch spriteBatch, int score, int bulletCount, int enemyCount, bool testMode = false, 
             float playerHealth = 100f, int wave = 1, float timeRemaining = 0f)
         {
-            var viewport = _graphicsDevice.Viewport;
             
             // Draw main HUD panel with better organization
             DrawMainInfoPanel(spriteBatch, score, bulletCount, enemyCount, playerHealth, wave, timeRemaining);
-            
+
             // Draw test mode indicator
             if (testMode)
             {
-                DrawTestModeIndicator(spriteBatch, viewport);
+                DrawTestModeIndicator(spriteBatch);
+                // Draw performance warnings with better styling
+                DrawPerformanceWarnings(spriteBatch, bulletCount);
             }
-
-            // Draw performance warnings with better styling
-            DrawPerformanceWarnings(spriteBatch, bulletCount);
         }
 
         private void DrawMainInfoPanel(SpriteBatch spriteBatch, int score, int bulletCount, int enemyCount, 
             float playerHealth, int wave, float timeRemaining)
         {
             // Main HUD panel with better sizing - made much taller to accommodate all elements with proper spacing
-            var mainPanel = new Rectangle(10, 10, 320, 220);
+            var mainPanel = new Rectangle((int)(_screenView.Width*0.01f), (int)(_screenView.Height*0.01f), 320, 220);
             
             // Draw background with gradient effect
             spriteBatch.Draw(_pixelTexture, mainPanel, new Color(0, 0, 0, 200));
@@ -136,9 +136,9 @@ namespace MonoGame2DShooterPrototype.Source.UI
             spriteBatch.Draw(_pixelTexture, new Rectangle(bounds.X + bounds.Width - borderThickness, bounds.Y, borderThickness, bounds.Height), _hudBorderColor);
         }
 
-        private void DrawTestModeIndicator(SpriteBatch spriteBatch, Viewport viewport)
+        private void DrawTestModeIndicator(SpriteBatch spriteBatch)
         {
-            var testModePanel = new Rectangle(viewport.Width - 130, 10, 120, 35);
+            var testModePanel = new Rectangle(_screenView.Width - 130, 10, 120, 35);
             DrawHUDPanel(spriteBatch, testModePanel);
             
             string testText = "TEST MODE";
